@@ -1,0 +1,27 @@
+<mujoco>
+	<!-- set some defaults for units and lighting -->
+	<compiler angle="degree" coordinate="local" inertiafromgeom="true"/>
+	
+	<asset>
+		<texture type="skybox" builtin="gradient" rgb1="1 1 1" rgb2=".6 .8 1" width="512" height="512"/>
+		<texture name="texplane" type="2d" builtin="checker" rgb1=".2 .3 .4" rgb2=".1 0.15 0.2" width="512" height="512" mark="cross" markrgb=".8 .8 .8"/>  
+		<material name="matplane" reflectance="0.3" texture="texplane" texrepeat="2 2" texuniform="true"/>
+	</asset>
+
+	<option gravity="0 0 0" timestep="0.002" o_solimp="0.9 0.95 0.001 0.1 1" o_solref="0.004 2">
+		<flag override="enable"/>
+	</option>
+
+    <default>
+        <position gear="1" ctrllimited="true" ctrlrange="-3.00 3.00"  forcelimited="true" forcerange="-8 8" kp="500"/>
+        <geom mass="0.001" rgba=".95 .95 .95 1" contype="1"  conaffinity="1" />
+        <joint type="hinge" axis="1 0 0" damping="0.005" armature="0.00065"/>
+        <!--
+        <geom conaffinity="0" condim="3" friction="1 0.05 0.00001" margin="0.01" density="1000" />
+        <joint armature='0.001' damping="0" frictionloss="0.001" /> 
+         damping="0.5" armature="0.0065" limited="true" range="-180 180" />
+        
+    	-->
+    </default>
+
+</mujoco>

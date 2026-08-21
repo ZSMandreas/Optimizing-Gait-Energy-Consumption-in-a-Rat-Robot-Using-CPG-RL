@@ -1,0 +1,179 @@
+body {
+  font-family: 'Noto Sans', sans-serif;
+  background: #fbfbfd;
+}
+
+.footer .icon-link {
+  font-size: 25px;
+  color: #000;
+}
+
+.link-block a {
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.dnerf {
+  font-variant: small-caps;
+}
+
+.teaser .hero-body {
+  padding-top: 0;
+  padding-bottom: 3rem;
+}
+
+.teaser {
+  font-family: 'Google Sans', sans-serif;
+}
+
+.publication-title {
+  font-family: 'Google Sans', sans-serif;
+}
+
+.publication-authors {
+  font-family: 'Google Sans', sans-serif;
+}
+
+.publication-authors a {
+  color: hsl(204, 86%, 45%) !important;
+}
+
+.publication-authors a:hover {
+  text-decoration: underline;
+}
+
+.author-block {
+  display: inline-block;
+}
+
+.results-carousel {
+  overflow: hidden;
+}
+
+.results-carousel .item {
+  margin: 5px;
+  overflow: hidden;
+  padding: 20px;
+  font-size: 0;
+}
+
+.results-carousel video {
+  margin: 0;
+}
+
+.hero-banner-video {
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18);
+}
+
+.fig-card {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  padding: 1.1rem;
+  height: 100%;
+}
+
+.fig-card img {
+  border-radius: 8px;
+  width: 100%;
+}
+
+.fig-card .caption {
+  font-size: 0.9rem;
+  color: #555;
+  margin-top: 0.6rem;
+  line-height: 1.35;
+}
+
+.metric-table th,
+.metric-table td {
+  text-align: center;
+  vertical-align: middle;
+}
+
+.metric-best {
+  color: #1f7a33;
+  font-weight: 700;
+}
+
+.video-card {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  padding: 0.9rem;
+  height: 100%;
+}
+
+.video-card video {
+  border-radius: 8px;
+  width: 100%;
+  background: #000;
+}
+
+.video-card .caption {
+  font-size: 0.92rem;
+  color: #444;
+  margin-top: 0.55rem;
+}
+
+.section {
+  padding: 2.5rem 1.5rem;
+}
+
+.tag.is-vel {
+  background: #eef3ff;
+  color: #2b59c3;
+  font-weight: 600;
+}
+
+.motivation-video {
+  max-width: 720px;
+  margin: 0 auto;
+  display: block;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  width: 100%;
+}
+
+.ablation-table-wrap {
+  overflow-x: auto;
+  margin: 1rem 0;
+}
+
+.ablation-table {
+  font-size: 0.92rem;
+}
+
+.ablation-table th,
+.ablation-table td {
+  text-align: center;
+  vertical-align: middle;
+}
+
+.ablation-table .row-label {
+  text-align: left;
+  font-weight: 500;
+}
+
+.ablation-table .section-row td {
+  text-align: left;
+  font-style: italic;
+  color: #555;
+  background: #f7f7f9;
+  padding-top: 0.55rem;
+  padding-bottom: 0.55rem;
+}
+
+.ablation-table .metric-best {
+  color: #1f7a33;
+  font-weight: 700;
+}
+
+.ablation-caption {
+  font-size: 0.88rem;
+  color: #666;
+  margin-top: 0.75rem;
+  line-height: 1.4;
+  text-align: center;
+}

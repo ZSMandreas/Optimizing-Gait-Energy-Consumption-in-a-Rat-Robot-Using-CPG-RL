@@ -1,0 +1,11 @@
+<mujoco>
+	<sensor>
+        <jointpos name="thigh_joint" joint="thigh_joint"/>
+        <jointpos name="leg_joint" joint="leg_joint"/>
+    </sensor>
+
+    <actuator>
+        <position name="leg_joint" joint="leg_joint"/>
+        <position name="thigh_joint" joint="thigh_joint"/>
+    </actuator>
+</mujoco>

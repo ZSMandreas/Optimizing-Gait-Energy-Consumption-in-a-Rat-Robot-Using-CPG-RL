@@ -1,0 +1,14 @@
+Loading PPO model: logs/w3_ours_v3.1/seed0/checkpoints/rat_cpg_ppo_route_a_1500000_steps.zip
+
+=== Running config kp2_kv0 ===
+[v3.1 env init] xvel_boost_multiplier = 5.0
+[v3.1 env init] Ours reward weights = {'alpha_W_pos': 0.3, 'alpha_W_neg': 0.6, 'alpha_E_damp': 0.5, 'alpha_E_fric': 0.5, 'alpha_E_norm': 1.0}
+  overrode kp,kv on 8 leg actuators
+  wrote logs/w3_ours_v3.1/seed0/eval_164steps/kp2_kv0/step_metrics.csv (3280 rows)
+  summary: {'kp': 2.0, 'kv': 0.0, 'n_episodes': 20, 'mean_steps': 164.0, 'mean_distance_m': 1.6458, 'sat_frac': 0.0123, 'rms_over_peak': 0.3773, 'W_pos_total_J': 295.2541, 'W_neg_total_J': 38.4192, 'neg_frac': 0.1151}
+
+=========== ablation summary ===========
+ kp  kv  n_episodes  mean_steps  mean_distance_m  sat_frac  rms_over_peak  W_pos_total_J  W_neg_total_J  neg_frac
+2.0 0.0          20       164.0           1.6458    0.0123         0.3773       295.2541        38.4192    0.1151
+
+Written logs/w3_ours_v3.1/seed0/eval_164steps/ablation_summary.csv

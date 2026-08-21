@@ -1,0 +1,26 @@
+{
+  "model_path": "../TrotGait/models/dynamic_4l_kp2.xml",
+  "max_episode_steps": 4100,
+  "target_speed": 0.06,
+  "vel_reward_sigma": 0.04,
+  "xvel_reward_sigma": 0.04,
+  "vel_weight": 1.0,
+  "pose_weight": 0.2,
+  "x_weight": 0.1,
+  "xvel_boost_multiplier": 1.0,
+  "body_height_weight": 0.02,
+  "body_vz_weight": 0.02,
+  "smooth_weight": 0.10,
+  "torque_smooth_weight": 0.01,
+  "sat_weight": 5.0,
+  "sat_threshold": 0.75,
+  "impact_weight": 0.01,
+  "cot_weight": 0.0,
+  "ours_weights": {
+    "alpha_W_pos": 0.30,
+    "alpha_W_neg": 0.60,
+    "alpha_E_damp": 0.5,
+    "alpha_E_fric": 0.5,
+    "alpha_E_norm": 1.0
+  }
+}

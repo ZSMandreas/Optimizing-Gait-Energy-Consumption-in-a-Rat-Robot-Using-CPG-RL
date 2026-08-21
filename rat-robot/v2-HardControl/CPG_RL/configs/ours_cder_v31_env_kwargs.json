@@ -1,0 +1,12 @@
+{
+  "model_path": "../TrotGait/models/dynamic_4l_kp2.xml",
+  "max_episode_steps": 4100,
+  "xvel_boost_multiplier": 5.0,
+  "ours_weights": {
+    "alpha_W_pos": 0.3,
+    "alpha_W_neg": 0.6,
+    "alpha_E_damp": 0.5,
+    "alpha_E_fric": 0.5,
+    "alpha_E_norm": 1.0
+  }
+}

@@ -1,0 +1,16 @@
+/home/user/anaconda3/lib/python3.12/site-packages/stable_baselines3/common/on_policy_algorithm.py:150: UserWarning: You are trying to run PPO on the GPU, but it is primarily intended to run on the CPU when not using a CNN policy (you are using ActorCriticPolicy which should be a MlpPolicy). See https://github.com/DLR-RM/stable-baselines3/issues/1245 for more info. You can pass `device='cpu'` or `export CUDA_VISIBLE_DEVICES=` to force using the CPU.Note: The model will train, but the GPU utilization will be poor and the training might take longer than on CPU.
+  warnings.warn(
+Loading PPO model: logs/w3_ours_v3.1/seed2/checkpoints/rat_cpg_ppo_route_a_1500000_steps.zip
+
+=== Running config kp2_kv0 ===
+[v3.1 env init] xvel_boost_multiplier = 5.0
+[v3.1 env init] Ours reward weights = {'alpha_W_pos': 0.3, 'alpha_W_neg': 0.6, 'alpha_E_damp': 0.5, 'alpha_E_fric': 0.5, 'alpha_E_norm': 1.0}
+  overrode kp,kv on 8 leg actuators
+  wrote logs/w3_ours_v3.1/seed2/eval/kp2_kv0/step_metrics.csv (1640 rows)
+  summary: {'kp': 2.0, 'kv': 0.0, 'n_episodes': 20, 'mean_steps': 82.0, 'mean_distance_m': 0.4034, 'sat_frac': 0.024, 'rms_over_peak': 0.3213, 'W_pos_total_J': 65.436, 'W_neg_total_J': 32.43, 'neg_frac': 0.3314}
+
+=========== ablation summary ===========
+ kp  kv  n_episodes  mean_steps  mean_distance_m  sat_frac  rms_over_peak  W_pos_total_J  W_neg_total_J  neg_frac
+2.0 0.0          20        82.0           0.4034     0.024         0.3213         65.436          32.43    0.3314
+
+Written logs/w3_ours_v3.1/seed2/eval/ablation_summary.csv

@@ -1,0 +1,85 @@
+--- launch_ours_v3.1_overnight.sh	2026-05-08 12:16:44.829679140 +0200
++++ launch_ablation_no_norm_seed0.sh	2026-05-17 01:02:55.800900460 +0200
+@@ -1,24 +1,33 @@
+ #!/bin/bash
++# Ablation A: CDER v3.1 with alpha_E_norm = 0 (seed 0).
++# Copied from launch_ours_v3.1_overnight.sh — only OUT_DIR, env-kwargs, and run label differ.
+ set -euo pipefail
+ 
+ cd "$(dirname "$0")"
+ 
+ TIMESTAMP=$(date +%Y%m%d_%H%M%S)
+-OUT_DIR="logs/w3_ours_v3.1/seed0"
++OUT_DIR="logs/w3_ours_v3.1_ablation_no_norm/seed0"
+ mkdir -p "$OUT_DIR"
+ 
+ LOG_FILE="$OUT_DIR/train_${TIMESTAMP}.log"
++ENV_KWARGS_FILE="configs/ablation_no_norm_env_kwargs.json"
++ORIG_SCRIPT="launch_ours_v3.1_overnight.sh"
++NEW_SCRIPT="launch_ablation_no_norm_seed0.sh"
+ 
+-echo "[$(date +%H:%M:%S)] Launching Ours v3.1 seed 0..."
++echo "[$(date +%H:%M:%S)] Launching CDER Ablation A (no alpha_E_norm) seed 0..."
+ echo "  - 1.5M steps"
+ echo "  - 82-step horizon (max_episode_steps=4100 sim_steps)"
+ echo "  - xvel_boost_multiplier = 5.0"
+-echo "  - Energy weights UNCHANGED from v3 (Option A)"
++echo "  - ours_weights alpha_E_norm = 0.00 (only CDER change vs v3.1 hierarchy)"
+ echo "  - Output: $OUT_DIR"
+ echo "  - Log:    $LOG_FILE"
+ echo ""
+ 
+-python train_ppo.py \
++diff -u "$ORIG_SCRIPT" "$NEW_SCRIPT" > "$OUT_DIR/launch_script_diff.txt" || true
++
++ENV_KWARGS=$(python3 -c "import json; print(json.dumps(json.load(open('$ENV_KWARGS_FILE'))))")
++
++nohup python train_ppo.py \
+     --total-steps 1500000 \
+     --seed 0 \
+     --n-steps 1024 \
+@@ -29,7 +38,42 @@
+     --learning-rate 3e-4 \
+     --gamma 0.99 \
+     --env-class ours_cder_v31_env:RatCpgEnvEnergySubstep50ShapeV3 \
+-    --env-kwargs '{"model_path": "../TrotGait/models/dynamic_4l_kp2.xml", "max_episode_steps": 4100, "xvel_boost_multiplier": 5.0}' \
++    --env-kwargs "$ENV_KWARGS" \
+     --out-dir "$OUT_DIR" \
+-    > "$LOG_FILE" 2>&1
++    > "$LOG_FILE" 2>&1 &
+ 
++PID=$!
++echo "$PID" > "$OUT_DIR/train.pid"
++disown "$PID" 2>/dev/null || true
++
++python3 -c "
++import json
++from pathlib import Path
++cfg = {
++  'run_name': 'ablation_no_norm_seed0',
++  'original_launch_script': '$ORIG_SCRIPT',
++  'env_kwargs_file': '$ENV_KWARGS_FILE',
++  'env_kwargs': json.load(open('$ENV_KWARGS_FILE')),
++  'train_ppo': {
++    'total_steps': 1500000,
++    'seed': 0,
++    'n_steps': 1024,
++    'batch_size': 128,
++    'gae_lambda': 0.95,
++    'clip_range': 0.2,
++    'ent_coef': 0.01,
++    'learning_rate': 3e-4,
++    'gamma': 0.99,
++    'env_class': 'ours_cder_v31_env:RatCpgEnvEnergySubstep50ShapeV3',
++    'n_epochs': 10,
++    'policy': 'MlpPolicy',
++  },
++  'note': 'CDER alphas passed via ours_weights; flat alpha_* keys in user spec map here.',
++}
++Path('$OUT_DIR/effective_config.json').write_text(json.dumps(cfg, indent=2))
++"
++
++echo "Launched. PID=$PID"
++echo "PID file: $OUT_DIR/train.pid"
++echo "Diff saved: $OUT_DIR/launch_script_diff.txt"
++echo "Config: $OUT_DIR/effective_config.json"

@@ -1,0 +1,2 @@
+kp,kv,n_episodes,mean_steps,mean_distance_m,sat_frac,rms_over_peak,W_pos_total_J,W_neg_total_J,neg_frac
+2.0,0.0,20,41.0,0.3751227103673862,0.4367378048780488,0.757969660486484,179.7165011098508,82.78037745700203,0.3153575688555073

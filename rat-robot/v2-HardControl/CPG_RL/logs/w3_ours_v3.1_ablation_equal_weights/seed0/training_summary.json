@@ -1,0 +1,160 @@
+{
+  "ablation": "equal_weights",
+  "title": "Ablation B \u2014 equal CDER weights (0.50)",
+  "log_dir": "/home/user/rat_ws/Optimizing-Gait-Energy-Consumption-in-a-Rat-Robot-Using-CPG-RL/rat-robot/v2-HardControl/CPG_RL/logs/w3_ours_v3.1_ablation_equal_weights/seed0",
+  "ours_weights": {
+    "alpha_W_pos": 0.5,
+    "alpha_W_neg": 0.5,
+    "alpha_E_damp": 0.5,
+    "alpha_E_fric": 0.5,
+    "alpha_E_norm": 0.5
+  },
+  "wall": {
+    "start_iso": "2026-05-17T01:03:33",
+    "end_iso": "2026-05-17T10:16:44.144657",
+    "duration_hours": 9.219762404722221,
+    "duration_seconds": 33191.144657
+  },
+  "final_log": {
+    "E_damp_J": 0.0422,
+    "E_fric_J": 0.0104,
+    "E_norm_J": 0.018,
+    "W_pos_J": 0.086,
+    "W_neg_J": 0.0463,
+    "r_energy": -0.101,
+    "r_vel": 0.651,
+    "r_pose": -0.00192,
+    "r_xvel": -0.0338,
+    "ep_len_mean": 82.0,
+    "ep_rew_mean": 35.6,
+    "fps": 45.0,
+    "total_timesteps": 1503232.0,
+    "approx_kl": 0.09043664,
+    "clip_fraction": 0.554,
+    "explained_variance": 0.936,
+    "std": 0.205,
+    "time_elapsed": 33185.0
+  },
+  "tb_tail": {
+    "rollout/ep_rew_mean": {
+      "mean": 34.534078712463376,
+      "std": 0.8354007955244298,
+      "last": 35.56864547729492,
+      "step": 1503232,
+      "n": 100
+    },
+    "rollout/ep_len_mean": {
+      "mean": 82.0,
+      "std": 0.0,
+      "last": 82.0,
+      "step": 1503232,
+      "n": 100
+    },
+    "train/clip_fraction": {
+      "mean": 0.5406415992975235,
+      "std": 0.021769122007264944,
+      "last": 0.554272472858429,
+      "step": 1503232,
+      "n": 100
+    },
+    "reward/r_energy": {
+      "mean": -0.07451297204941511,
+      "std": 0.0250128007100591,
+      "last": -0.10140120983123779,
+      "step": 1503232,
+      "n": 100
+    },
+    "reward/r_vel": {
+      "mean": 0.6522726398706437,
+      "std": 0.050146449661481664,
+      "last": 0.6508893370628357,
+      "step": 1503232,
+      "n": 100
+    },
+    "reward/r_pose": {
+      "mean": -0.0021747738984413444,
+      "std": 0.0001117643938141123,
+      "last": -0.0019223529379814863,
+      "step": 1503232,
+      "n": 100
+    },
+    "reward/r_xvel": {
+      "mean": -0.03234708053059876,
+      "std": 0.016258404372301898,
+      "last": -0.03383229672908783,
+      "step": 1503232,
+      "n": 100
+    },
+    "energy/W_pos_J": {
+      "mean": 0.06384698059409857,
+      "std": 0.018326514966276443,
+      "last": 0.08596155792474747,
+      "step": 1503232,
+      "n": 100
+    },
+    "energy/W_neg_J": {
+      "mean": 0.03464566916227341,
+      "std": 0.013924527066987782,
+      "last": 0.04631098732352257,
+      "step": 1503232,
+      "n": 100
+    },
+    "energy/E_damp_J": {
+      "mean": 0.032145209815353154,
+      "std": 0.00969797084875768,
+      "last": 0.0421503409743309,
+      "step": 1503232,
+      "n": 100
+    },
+    "energy/E_fric_J": {
+      "mean": 0.010775885116308927,
+      "std": 0.0003582085038952478,
+      "last": 0.010396905243396759,
+      "step": 1503232,
+      "n": 100
+    },
+    "energy/E_norm_J": {
+      "mean": 0.007612199441064149,
+      "std": 0.008333939353479774,
+      "last": 0.01798262447118759,
+      "step": 1503232,
+      "n": 100
+    },
+    "train/approx_kl": {
+      "mean": 0.07950137719511986,
+      "std": 0.01311575128694103,
+      "last": 0.09043663740158081,
+      "step": 1503232,
+      "n": 100
+    },
+    "train/explained_variance": {
+      "mean": 0.9299941909313202,
+      "std": 0.016987333898395265,
+      "last": 0.9358690977096558,
+      "step": 1503232,
+      "n": 100
+    },
+    "train/std": {
+      "mean": 0.212745730727911,
+      "std": 0.0065556620117012,
+      "last": 0.20528583228588104,
+      "step": 1503232,
+      "n": 100
+    }
+  },
+  "sanity": {
+    "return": 37.06,
+    "fwd_mm_s": 75.0,
+    "b_mm": 1.7,
+    "a_mm": 10.0,
+    "ep_len": 82.0
+  },
+  "m9_cot": 4.410993355062976,
+  "m4_fwd_mm_s": 76.2,
+  "action_stats": {
+    "b_mm_mean": 2.4341300942003725,
+    "b_mm_std": 1.2324378816164372,
+    "a_mm_mean": 10.0,
+    "a_mm_std": 0.0
+  }
+}

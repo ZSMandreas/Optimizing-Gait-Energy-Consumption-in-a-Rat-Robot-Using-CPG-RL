@@ -1,0 +1,1 @@
+/usr/bin/c++    -rdynamic CMakeFiles/SimpleMaus.dir/main.cpp.o CMakeFiles/SimpleMaus.dir/Kinematics.cpp.o CMakeFiles/SimpleMaus.dir/MouseCom.cpp.o CMakeFiles/SimpleMaus.dir/MouseCtrl.cpp.o  -o SimpleMaus -latomic -lpthread 

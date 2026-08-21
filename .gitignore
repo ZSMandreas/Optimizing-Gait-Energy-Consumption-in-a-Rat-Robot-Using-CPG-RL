@@ -1,0 +1,5 @@
+# Keep oversized experiment artifacts out of Git
+rat-robot/v2-HardControl/CPG_RL/rat_episode_summary.csv
+__pycache__/
+*.pyc
+MUJOCO_LOG.TXT

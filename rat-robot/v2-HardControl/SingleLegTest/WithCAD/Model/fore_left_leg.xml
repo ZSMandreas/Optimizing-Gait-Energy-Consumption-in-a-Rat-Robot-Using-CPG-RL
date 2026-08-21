@@ -1,0 +1,6 @@
+<mujoco>
+	<include file="basic.xml" />
+	<include file="load_CAD_fl.xml" />
+	<include file="body_fl.xml"/>
+	<include file="devices.xml"/>
+</mujoco>

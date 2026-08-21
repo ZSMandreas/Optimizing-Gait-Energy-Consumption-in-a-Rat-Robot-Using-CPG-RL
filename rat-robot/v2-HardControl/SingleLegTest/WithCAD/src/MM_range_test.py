@@ -1,0 +1,85 @@
+import numpy as np
+from matplotlib import pyplot as plt
+from matplotlib import animation
+
+import math
+from LegModel.legs import LegModel
+
+if __name__ == '__main__':
+	# 1: AE 	2: AB
+	# 3: BC 	4: CD
+	# 5: DE 	6: EF (DE+EF ~= DF)
+	leg_params = [0.031, 0.0128, 0.0118, 0.040, 0.015, 0.035]
+	fl_left = LegModel(leg_params)
+	
+	PI = math.pi
+	stepNum = 100
+	initRad = PI*3/4
+	stepRad = (2*initRad) / stepNum
+	
+	points_list = []
+	#q1 = 0
+	#for i in range(int(stepNum/2)):
+	q1 = initRad-PI/2
+	for i in range(stepNum):
+		init_q2 = q1
+		q2 = init_q2
+		step_points = []
+		while q2 < PI*5/6:
+			#print([q1, q2])
+			cur_points = fl_left.angel_2_pos(q1, q2)
+			if len(cur_points) == 0:
+				break
+			step_points.append(cur_points)
+			q2 += stepRad
+
+		q2 = init_q2
+		while q2 > -PI*5/6:
+			cur_points = fl_left.angel_2_pos(q1, q2)
+			if len(cur_points) == 0:
+				break
+			step_points.append(cur_points)
+			q2 -= stepRad
+
+		points_list.append(step_points)
+		q1 -= stepRad
+
+	fig, ax = plt.subplots()
+	leg_list = []
+	for i in range(stepNum):
+		pL = len(points_list[i])
+		#print(pL)
+		for j in range(pL):
+			leg_list.append(points_list[i][j])
+		y_list = [points_list[i][j][-1][0] for j in range(pL)]
+		z_list = [points_list[i][j][-1][1] for j in range(pL)]
+		l1 = ax.scatter(y_list, z_list, color='lightgreen')
+	ax.set_xlabel(r'$Y\ data$')
+	ax.set_ylabel(r'$Z\ data$')
+	ax.set_aspect(1)
+	ax.set_xlim(-0.1, 0.1)
+	ax.set_ylim(-0.1, 0.1)
+	ax.xaxis.set_ticks(np.arange(-0.1, 0.1, step=0.02)) 
+	ax.yaxis.set_ticks(np.arange(-0.1, 0.1, step=0.02))    
+	ax.grid()
+
+	lines = plt.plot([], [], 'r-',  # EA
+			[], [], 'k-',			# AB
+			[], [], 'r-',			# BC
+			[], [], 'b-',			# CD
+			[], [], 'b-',			# DE
+			[], [], 'b-',)			# EF
+
+	def update(k):
+		ty = [leg_list[k][4][0]]
+		tz = [leg_list[k][4][1]]
+		for ti in range(6):
+			ty.append(leg_list[k][ti][0])
+			tz.append(leg_list[k][ti][1])
+
+		for i in range(6):
+			lines[i].set_data([ty[i], ty[i+1]], [tz[i], tz[i+1]])
+		return lines
+
+	ani = animation.FuncAnimation(fig, update, frames=len(leg_list), interval=100,)
+	plt.show()

@@ -1,0 +1,46 @@
+<mujoco>
+	<worldbody>
+		<light directional="false" diffuse=".5 .5 .5" pos="0 0 1" dir="0 0 -1"/>
+		<!-- Define the plane of the simulation environment -->
+		<geom type="plane" size="0 0 0.03" material="matplane"/>
+		<!-- Define the position of main body box -->
+
+		<body name="servo_horn" pos="0.0136 -0.0055 0.1">
+			<joint name="thigh_joint" pos="0 0 0.0064" ref="0" damping="0.75"/>
+			
+			<site name="thigh_link" pos="0.000 0 0.0064" size="0.001" rgba=".8 .1 .8 1"/>
+			<geom name="servo_horn" type="mesh"  mesh="servo_link" pos="-0.0112 0.0015 0.0043" euler="90 0 0"/>
+			<body name="thigh_up" pos="0 0 0.0182" euler="-16.712 0 0">
+				<joint name="thigh_up" pos="0 0 0"/>
+				<site name="thigh_up" pos="0 0 0" size="0.001" rgba=".8 .1 .8 1"/>
+				<geom name="thigh_up" type="mesh" mesh="thigh_up" contype="2"  conaffinity="2"  pos="-0.0064 0.05 0" euler="90 0 0"/>
+				<body name="knee_up_1" pos="0 0.04 0">
+					<geom name="knee_up_1" type="cylinder" mass=".001" contype="2"  conaffinity="2"  fromto="-0.002 0 0 0.002 0 0" size="0.0025" rgba=".9 .1 .1 1" />
+				</body>
+			</body>
+		</body>
+
+		<body name="main_leg" pos="0 0 0.1">
+			<geom name="hip_box" type="mesh" mesh="hip" pos="0 0.0004 0.0071" euler="90 0 0"/>
+			<body name="thigh_down" pos="0.0136 -0.0055 -0.0064">
+				<joint name="leg_joint" pos="0 0 0" ref="0" damping="0.75"/>
+				<site name="leg_link" pos="0 0 0" size="0.003" rgba=".5 .5 .8 1"/>
+				<geom name="thigh_down" type="mesh" mesh="thigh_down"   contype="2"  conaffinity="2" pos="-0.0044 0.05 0" euler="180 0 0"/>
+
+				<body name="foot" pos="0 0.031 0" euler="-29.168 0 0">
+					<joint name="knee_down" pos="0 0 0"/>
+					<site name="knee_down" pos="0 0 0" size="0.001" rgba=".8 .1 .8 1"/>
+					<geom name="foot" type="mesh" mesh="foot" pos="-0.0064 0 -0.035" euler="90 0 0" contype="1"conaffinity="1"/>
+					<site name="ankle" pos="0 0 -0.035" size="0.003" rgba=".8 .1 .8 1"/>
+					<body name="knee_up_2" pos="0 0 0.015">
+						<geom name="knee_up_2" type="cylinder" mass=".001" fromto="-0.002 0 0 0.002 0 0" size="0.0025" rgba=".9 .9 .1 1" />
+					</body>
+				</body>
+			</body>
+		</body>
+	</worldbody>
+	<equality>
+		<connect anchor="0 0 0" body1="knee_up_1" body2="knee_up_2"  name="equality_constraint"/>
+	</equality>
+
+</mujoco>
