@@ -1,5 +1,5 @@
 {
-  "model": "logs/w3_ours_v3.1/seed0/rat_cpg_ppo_route_a.zip",
+  "model": "logs/ours/seed0/rat_cpg_ppo_route_a.zip",
   "episodes": 3,
   "samples": 246,
   "ranges": {

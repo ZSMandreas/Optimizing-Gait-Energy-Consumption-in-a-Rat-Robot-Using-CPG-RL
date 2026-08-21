@@ -9,7 +9,7 @@
 [v3.1 env init] xvel_boost_multiplier = 5.0
 [v3.1 env init] Ours reward weights = {'alpha_W_pos': 0.3, 'alpha_W_neg': 0.6, 'alpha_E_damp': 0.5, 'alpha_E_fric': 0.5, 'alpha_E_norm': 1.0}
 Using cuda device
-Logging to logs/w3_ours_v3.1/seed2/tb_logs/PPO_1
+Logging to logs/ours/seed2/tb_logs/PPO_1
 ---------------------------------
 | energy/            |          |
 |    E_damp_J        | 0.133    |

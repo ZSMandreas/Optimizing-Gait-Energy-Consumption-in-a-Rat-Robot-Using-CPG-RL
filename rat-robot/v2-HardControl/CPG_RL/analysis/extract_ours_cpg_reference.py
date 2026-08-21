@@ -31,7 +31,7 @@ from ours_cder_v31_env import RatCpgEnvEnergySubstep50ShapeV3  # noqa: E402
 
 XML_REL = "../TrotGait/models/dynamic_4l_kp2.xml"
 MODEL_PATH = str((ROOT / XML_REL).resolve())
-CKPT = ROOT / "logs/w3_ours_v3.1/seed0/rat_cpg_ppo_route_a.zip"
+CKPT = ROOT / "logs/ours/seed0/rat_cpg_ppo_route_a.zip"
 OUT_DIR = ROOT / "outputs/thesis_experiments_planner_baseline/ours_cpg_reference"
 
 LEG_NAMES = ["FL", "FR", "RL", "RR"]

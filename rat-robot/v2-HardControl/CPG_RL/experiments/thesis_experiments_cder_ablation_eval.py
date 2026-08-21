@@ -2,7 +2,7 @@
 """
 M1–M9 run_cder_closure_validation protocol for CDER weight ablations (seed 0).
 
-Runs baseline (W2) + ablation policy per output directory, reusing
+Runs baseline + ablation policy per output directory, reusing
 `run_cder_closure_validation.py` task implementations.
 
 Outputs (new dirs only):
@@ -29,18 +29,18 @@ import run_cder_closure_validation as M  # noqa: E402
 from ours_cder_v31_env import RatCpgEnvEnergySubstep50ShapeV3  # noqa: E402
 
 V31_BASELINE_OUT = ROOT / "outputs" / "thesis_experiments"
-V31_CDER_CKPT = ROOT / "logs/w3_ours_v3.1/seed0/rat_cpg_ppo_route_a.zip"
+V31_CDER_CKPT = ROOT / "logs/ours/seed0/rat_cpg_ppo_route_a.zip"
 
 ABLATIONS: Dict[str, Dict[str, Any]] = {
     "no_norm": {
         "title": "Ablation A (alpha_E_norm = 0)",
-        "log_dir": ROOT / "logs/w3_ours_v3.1_ablation_no_norm/seed0",
+        "log_dir": ROOT / "logs/ours_ablation_no_norm/seed0",
         "env_kwargs_file": ROOT / "configs/ablation_no_norm_env_kwargs.json",
         "out_dir": ROOT / "outputs/thesis_experiments_v3.1_ablation_no_norm",
     },
     "equal_weights": {
         "title": "Ablation B (equal CDER weights 0.50)",
-        "log_dir": ROOT / "logs/w3_ours_v3.1_ablation_equal_weights/seed0",
+        "log_dir": ROOT / "logs/ours_ablation_equal_weights/seed0",
         "env_kwargs_file": ROOT / "configs/ablation_equal_weights_env_kwargs.json",
         "out_dir": ROOT / "outputs/thesis_experiments_v3.1_ablation_equal_weights",
     },
@@ -175,7 +175,7 @@ def _sanity_fwd_mm_s(log_dir: Path) -> float:
 
 def write_comparison_md() -> None:
     entries = [
-        ("v3.1 CDER (ref)", V31_BASELINE_OUT, ROOT / "logs/w3_ours_v3.1/seed0"),
+        ("v3.1 CDER (ref)", V31_BASELINE_OUT, ROOT / "logs/ours/seed0"),
         ("Ablation A no_norm", ABLATIONS["no_norm"]["out_dir"], ABLATIONS["no_norm"]["log_dir"]),
         ("Ablation B equal_w", ABLATIONS["equal_weights"]["out_dir"], ABLATIONS["equal_weights"]["log_dir"]),
     ]

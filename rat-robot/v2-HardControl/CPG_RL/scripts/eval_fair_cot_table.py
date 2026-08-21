@@ -40,12 +40,12 @@ N_EP_M2 = 5
 N_EP_M4 = 3
 V_CMDS = (0.06, 0.09, 0.12)
 
-M2_PER_SPEED = {
-    0.06: (CPG_ROOT / "logs/w3_ours_vcmd0.06_thesis_scaled_v2/seed0/rat_cpg_ppo_route_a.zip",
+OURS_PER_SPEED = {
+    0.06: (CPG_ROOT / "logs/ours_vcmd0.06_thesis_scaled_v2/seed0/rat_cpg_ppo_route_a.zip",
            CPG_ROOT / "configs/v31_vcmd0.06_thesis_scaled_v2.json"),
-    0.09: (CPG_ROOT / "logs/w3_ours_vcmd0.09_thesis_scaled/seed0/rat_cpg_ppo_route_a.zip",
+    0.09: (CPG_ROOT / "logs/ours_vcmd0.09_thesis_scaled/seed0/rat_cpg_ppo_route_a.zip",
            CPG_ROOT / "configs/v31_vcmd0.09_thesis_scaled.json"),
-    0.12: (CPG_ROOT / "logs/w3_ours_v3.1/seed0/rat_cpg_ppo_route_a.zip",
+    0.12: (CPG_ROOT / "logs/ours/seed0/rat_cpg_ppo_route_a.zip",
            CPG_ROOT / "configs/ours_cder_v31_env_kwargs.json"),
 }
 
@@ -77,7 +77,7 @@ def _stats(scs: List[rss.EpisodeScalars]) -> Dict[str, float]:
 
 
 def measure_m2(v_cmd: float) -> Dict[str, float]:
-    ckpt, env_kw_path = M2_PER_SPEED[v_cmd]
+    ckpt, env_kw_path = OURS_PER_SPEED[v_cmd]
     env = RatCpgEnvEnergySubstep50ShapeV3(**rss.load_env_kwargs(env_kw_path))
     model = PPO.load(str(ckpt), env=env)
     e = env.unwrapped; mj = e.model
@@ -154,8 +154,8 @@ def main() -> None:
     cur = _read_cur()
     table: List[Dict[str, Any]] = []
     for v in V_CMDS:
-        m3_fre = float(cur[(v, "M3_planner")]["m3_fre"])
-        m4_f = float(cur[(v, "M4_planner_simplified")]["m4_f_hz"])
+        m3_fre = float(cur[(v, "baseline")]["m3_fre"])
+        m4_f = float(cur[(v, "baseline_simplified")]["m4_f_hz"])
         print(f"\n===== v_cmd={v:.2f} (M3 fre={m3_fre}, M4 f={m4_f}) =====", flush=True)
         def _p(tag, st):
             print(f"  {tag} steady: COT={st['cot']:.3f} @ {st['spd']:.1f} mm/s | "
@@ -164,9 +164,9 @@ def main() -> None:
         m2 = measure_m2(v); _p("M2", m2)
         m3 = measure_m3(m3_fre); _p("M3", m3)
         m4 = measure_m4(v, m4_f); _p("M4", m4)
-        for model, st, full in (("M2_ours", m2, cur[(v, "M2_ours")]),
-                                ("M3_planner", m3, cur[(v, "M3_planner")]),
-                                ("M4_planner_simplified", m4, cur[(v, "M4_planner_simplified")])):
+        for model, st, full in (("ours", m2, cur[(v, "ours")]),
+                                ("baseline", m3, cur[(v, "baseline")]),
+                                ("baseline_simplified", m4, cur[(v, "baseline_simplified")])):
             table.append({"v_cmd": v, "model": model,
                           "cot_fair": st["cot"], "cot_std": st["cot_std"],
                           "spd_fair": st["spd"],

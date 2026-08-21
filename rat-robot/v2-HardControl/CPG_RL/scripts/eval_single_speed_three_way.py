@@ -75,7 +75,7 @@ SUBSTEPS_PER_ENV = 50
 OUT_ROOT = CPG_ROOT / "outputs/final_result"
 OUT_SINGLE = OUT_ROOT / "single_speed"
 
-CKPT_M2 = CPG_ROOT / "logs/w3_ours_v3.1/seed0/rat_cpg_ppo_route_a.zip"
+CKPT_OURS = CPG_ROOT / "logs/ours/seed0/rat_cpg_ppo_route_a.zip"
 ENV_KWARGS_M2 = CPG_ROOT / "configs/ours_cder_v31_env_kwargs.json"
 MODEL_XML = (CPG_ROOT / "../TrotGait/models/dynamic_4l_kp2.xml").resolve()
 SCRIPT_M3 = TROT_SRC / "sim_test.py"
@@ -433,10 +433,10 @@ def load_env_kwargs(path: Path) -> dict:
     return kw
 
 
-def run_m2_ours() -> Tuple[List[SubstepEpisode], List[EpisodeScalars]]:
+def run_ours() -> Tuple[List[SubstepEpisode], List[EpisodeScalars]]:
     env_kwargs = load_env_kwargs(ENV_KWARGS_M2)
     env = RatCpgEnvEnergySubstep50ShapeV3(**env_kwargs)
-    model = PPO.load(str(CKPT_M2), env=env)
+    model = PPO.load(str(CKPT_OURS), env=env)
     e = env.unwrapped
     mj_model = e.model
     mj_data = e.data
@@ -615,7 +615,7 @@ def sweep_m3_fre(
     return float(best["fre_Hz"]), rows
 
 
-def run_m3_planner(
+def run_baseline(
     fre: Optional[float] = None,
     n_episodes: int = N_EPISODES,
 ) -> Tuple[List[SubstepEpisode], List[EpisodeScalars]]:
@@ -761,7 +761,7 @@ def sweep_m4_f(
     return float(best["f_Hz"]), rows
 
 
-def run_m4_planner_simplified(
+def run_baseline_simplified(
     f_planner: Optional[float] = None,
     n_episodes: int = N_EPISODES,
 ) -> Tuple[List[SubstepEpisode], List[EpisodeScalars]]:
@@ -1146,11 +1146,11 @@ def main() -> None:
     results: Dict[str, Any] = {}
 
     if "m2" in args.models:
-        ep2, sc2 = run_m2_ours()
+        ep2, sc2 = run_ours()
         sum2 = save_model_outputs(
-            "m2_ours",
-            "M2_ours",
-            str(CKPT_M2.relative_to(CPG_ROOT)),
+            "ours",
+            "ours",
+            str(CKPT_OURS.relative_to(CPG_ROOT)),
             {"target_speed": 0.12, "speed_match": "reference"},
             ep2, sc2,
             "RL CDER v3.1 reference (~97 mm/s); pilot env-step COT",
@@ -1158,10 +1158,10 @@ def main() -> None:
         results["m2"] = (sc2, sum2)
 
     if "m3" in args.models:
-        ep3, sc3 = run_m3_planner(fre=M3_FRE)
+        ep3, sc3 = run_baseline(fre=M3_FRE)
         sum3 = save_model_outputs(
-            "m3_planner",
-            "M3_planner",
+            "baseline",
+            "baseline",
             str(SCRIPT_M3.relative_to(CPG_ROOT.parent)),
             {"fre": M3_FRE, "kp": 2.0, "kv": 0.0, "measure_s": M3_MEASURE_S, "speed_matched": True},
             ep3, sc3,
@@ -1170,11 +1170,11 @@ def main() -> None:
         results["m3"] = (sc3, sum3)
 
     if "m4" in args.models:
-        ep4, sc4 = run_m4_planner_simplified(f_planner=F_M4)
+        ep4, sc4 = run_baseline_simplified(f_planner=F_M4)
         f_dev = 100.0 * (F_M4 - F_M4_NATIVE) / F_M4_NATIVE
         sum4 = save_model_outputs(
-            "m4_planner_simplified",
-            "M4_planner_simplified",
+            "baseline_simplified",
+            "baseline_simplified",
             str(SCRIPT_M4.relative_to(CPG_ROOT)),
             {"a": A_M4, "b": B_M4, "f": F_M4, "f_native": F_M4_NATIVE,
              "f_deviation_pct": f_dev, "r": R_M4, "speed_matched": True,
@@ -1185,10 +1185,10 @@ def main() -> None:
         results["m4"] = (sc4, sum4)
 
     # Rebuild three-way aggregates if all three summaries exist (on disk or this run)
-    subdirs = {"m2": "m2_ours", "m3": "m3_planner", "m4": "m4_planner_simplified"}
+    subdirs = {"m2": "ours", "m3": "baseline", "m4": "baseline_simplified"}
     if all((OUT_SINGLE / subdirs[k] / "eval_summary.json").exists() for k in subdirs):
         rows = []
-        for key, model in [("m2", "M2_ours"), ("m3", "M3_planner"), ("m4", "M4_planner_simplified")]:
+        for key, model in [("m2", "ours"), ("m3", "baseline"), ("m4", "baseline_simplified")]:
             if key in results:
                 rows.append(build_comparison_row(model, results[key][0]))
             else:
@@ -1199,9 +1199,9 @@ def main() -> None:
                 )
         write_three_way_comparison(OUT_SINGLE / "three_way_comparison.csv", rows)
 
-        sum2 = results["m2"][1] if "m2" in results else _load_summary_from_disk("m2_ours")
-        sum3 = results["m3"][1] if "m3" in results else _load_summary_from_disk("m3_planner")
-        sum4 = results["m4"][1] if "m4" in results else _load_summary_from_disk("m4_planner_simplified")
+        sum2 = results["m2"][1] if "m2" in results else _load_summary_from_disk("ours")
+        sum3 = results["m3"][1] if "m3" in results else _load_summary_from_disk("baseline")
+        sum4 = results["m4"][1] if "m4" in results else _load_summary_from_disk("baseline_simplified")
 
         m3_fre_sel = float(sum3.get("config", {}).get("fre", M3_FRE))
         m4_f_sel = float(sum4.get("config", {}).get("f", F_M4))

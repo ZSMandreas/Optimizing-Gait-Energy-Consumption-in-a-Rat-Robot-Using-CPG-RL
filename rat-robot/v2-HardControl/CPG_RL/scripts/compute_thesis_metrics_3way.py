@@ -40,19 +40,19 @@ BASE = CPG_ROOT / "outputs/final_result/single_speed"
 CONTROLLERS = [
     {
         "json_key": "Planner",
-        "subdir": "m3_planner",
+        "subdir": "baseline",
         "tag": "planner",
         "speed_key": "m3",
     },
     {
         "json_key": "Planner-simplified",
-        "subdir": "m4_planner_simplified",
+        "subdir": "baseline_simplified",
         "tag": "planner_simplified",
         "speed_key": "m4",
     },
     {
         "json_key": "Ours",
-        "subdir": "m2_ours",
+        "subdir": "ours",
         "tag": "ours",
         "speed_key": "m2",
     },
@@ -112,10 +112,10 @@ def _collect_ours_mu_f_window(i0: int, i1: int) -> Tuple[np.ndarray, float]:
     """Re-run M2 ep0; return mu4 (T_sub, 4) and mean f4 (Hz) for [i0:i1)."""
     from stable_baselines3 import PPO
     from ours_cder_v31_env import RatCpgEnvEnergySubstep50ShapeV3
-    from eval_single_speed_three_way import CKPT_M2, ENV_KWARGS_M2, ENV_STEPS, load_env_kwargs
+    from eval_single_speed_three_way import CKPT_OURS, ENV_KWARGS_M2, ENV_STEPS, load_env_kwargs
 
     env = RatCpgEnvEnergySubstep50ShapeV3(**load_env_kwargs(ENV_KWARGS_M2))
-    policy = PPO.load(str(CKPT_M2), env=env)
+    policy = PPO.load(str(CKPT_OURS), env=env)
     e = env.unwrapped
     mu_rows: List[np.ndarray] = []
     f_rows: List[np.ndarray] = []
@@ -143,7 +143,7 @@ def _collect_theta_episode(tag: str, fre_m3: float, f_m4: float) -> np.ndarray:
     """Return theta (4100, 4) for episode 0 at substep resolution."""
     from eval_single_speed_three_way import (
         A_M4,
-        CKPT_M2,
+        CKPT_OURS,
         DT_SUBSTEP,
         ENV_KWARGS_M2,
         ENV_STEPS,
@@ -164,7 +164,7 @@ def _collect_theta_episode(tag: str, fre_m3: float, f_m4: float) -> np.ndarray:
         import mujoco
 
         env = RatCpgEnvEnergySubstep50ShapeV3(**load_env_kwargs(ENV_KWARGS_M2))
-        policy = PPO.load(str(CKPT_M2), env=env)
+        policy = PPO.load(str(CKPT_OURS), env=env)
         e = env.unwrapped
         orig = mujoco.mj_step
 
@@ -384,8 +384,8 @@ def sanity_checks(results: Dict[str, Any]) -> Dict[str, Any]:
 
 def main() -> None:
     # CPG fre/f from Phase-1 eval configs
-    m3_cfg = json.loads((BASE / "m3_planner/eval_summary.json").read_text())["config"]
-    m4_cfg = json.loads((BASE / "m4_planner_simplified/eval_summary.json").read_text())["config"]
+    m3_cfg = json.loads((BASE / "baseline/eval_summary.json").read_text())["config"]
+    m4_cfg = json.loads((BASE / "baseline_simplified/eval_summary.json").read_text())["config"]
     fre_m3 = float(m3_cfg["fre"])
     f_m4 = float(m4_cfg["f"])
 
@@ -397,7 +397,7 @@ def main() -> None:
     }
 
     print("Collecting Ours mu over 2-stride window...")
-    ours_bundle = _load_stride_bundle("m2_ours", "ours")
+    ours_bundle = _load_stride_bundle("ours", "ours")
     i0 = int(ours_bundle["base"]["start_idx_global"])
     i1 = int(ours_bundle["base"]["end_idx_global"])
     mu_window, ours_f_hz = _collect_ours_mu_f_window(i0, i1)

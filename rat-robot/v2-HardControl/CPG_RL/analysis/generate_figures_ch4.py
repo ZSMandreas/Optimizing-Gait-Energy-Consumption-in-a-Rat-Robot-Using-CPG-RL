@@ -142,12 +142,12 @@ def main() -> None:
     anomalies: List[str] = []
 
     methods_82_energy = {
-        KEY_BASELINE: root / "logs/w2_baseline/eval_82steps_correct/seed0/analysis/per_episode_energy.csv",
-        KEY_OURS: root / "logs/w3_ours_v3.1/seed0/eval_82steps/analysis/per_episode_energy.csv",
+        KEY_BASELINE: root / "logs/baseline/eval_82steps_correct/seed0/analysis/per_episode_energy.csv",
+        KEY_OURS: root / "logs/ours/seed0/eval_82steps/analysis/per_episode_energy.csv",
     }
     methods_82_step = {
-        KEY_BASELINE: root / "logs/w2_baseline/eval_82steps_correct/seed0/kp2_kv0/step_metrics.csv",
-        KEY_OURS: root / "logs/w3_ours_v3.1/seed0/eval_82steps/kp2_kv0/step_metrics.csv",
+        KEY_BASELINE: root / "logs/baseline/eval_82steps_correct/seed0/kp2_kv0/step_metrics.csv",
+        KEY_OURS: root / "logs/ours/seed0/eval_82steps/kp2_kv0/step_metrics.csv",
     }
 
     output_dir = resolve_output_dir()

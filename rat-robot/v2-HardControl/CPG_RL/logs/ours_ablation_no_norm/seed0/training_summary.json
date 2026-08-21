@@ -1,7 +1,7 @@
 {
   "ablation": "no_norm",
   "title": "Ablation A \u2014 \u03b1_E_norm = 0",
-  "log_dir": "/home/user/rat_ws/Optimizing-Gait-Energy-Consumption-in-a-Rat-Robot-Using-CPG-RL/rat-robot/v2-HardControl/CPG_RL/logs/w3_ours_v3.1_ablation_no_norm/seed0",
+  "log_dir": "/home/user/rat_ws/Optimizing-Gait-Energy-Consumption-in-a-Rat-Robot-Using-CPG-RL/rat-robot/v2-HardControl/CPG_RL/logs/ours_ablation_no_norm/seed0",
   "ours_weights": {
     "alpha_W_pos": 0.3,
     "alpha_W_neg": 0.6,

@@ -1,6 +1,6 @@
 # Ablation B (equal weights) — Quick Sanity Check (5 episodes)
 
-- Checkpoint: `logs/w3_ours_v3.1_ablation_equal_weights/seed0/rat_cpg_ppo_route_a.zip`
+- Checkpoint: `logs/ours_ablation_equal_weights/seed0/rat_cpg_ppo_route_a.zip`
 - Config: `configs/ablation_equal_weights_env_kwargs.json`
 
 | Metric | Value |

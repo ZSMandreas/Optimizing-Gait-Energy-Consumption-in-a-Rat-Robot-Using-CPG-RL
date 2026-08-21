@@ -1,30 +1,30 @@
 --- launch_ours_v3.1_overnight.sh	2026-05-08 12:16:44.829679140 +0200
-+++ launch_ablation_equal_weights_seed0.sh	2026-05-17 01:03:05.037894909 +0200
++++ launch_ablation_no_norm_seed0.sh	2026-05-17 01:02:55.800900460 +0200
 @@ -1,24 +1,33 @@
  #!/bin/bash
-+# Ablation B: CDER v3.1 with all CDER weights equal (0.50), seed 0.
++# Ablation A: CDER v3.1 with alpha_E_norm = 0 (seed 0).
 +# Copied from launch_ours_v3.1_overnight.sh — only OUT_DIR, env-kwargs, and run label differ.
  set -euo pipefail
  
  cd "$(dirname "$0")"
  
  TIMESTAMP=$(date +%Y%m%d_%H%M%S)
--OUT_DIR="logs/w3_ours_v3.1/seed0"
-+OUT_DIR="logs/w3_ours_v3.1_ablation_equal_weights/seed0"
+-OUT_DIR="logs/ours/seed0"
++OUT_DIR="logs/ours_ablation_no_norm/seed0"
  mkdir -p "$OUT_DIR"
  
  LOG_FILE="$OUT_DIR/train_${TIMESTAMP}.log"
-+ENV_KWARGS_FILE="configs/ablation_equal_weights_env_kwargs.json"
++ENV_KWARGS_FILE="configs/ablation_no_norm_env_kwargs.json"
 +ORIG_SCRIPT="launch_ours_v3.1_overnight.sh"
-+NEW_SCRIPT="launch_ablation_equal_weights_seed0.sh"
++NEW_SCRIPT="launch_ablation_no_norm_seed0.sh"
  
 -echo "[$(date +%H:%M:%S)] Launching Ours v3.1 seed 0..."
-+echo "[$(date +%H:%M:%S)] Launching CDER Ablation B (equal CDER weights) seed 0..."
++echo "[$(date +%H:%M:%S)] Launching CDER Ablation A (no alpha_E_norm) seed 0..."
  echo "  - 1.5M steps"
  echo "  - 82-step horizon (max_episode_steps=4100 sim_steps)"
  echo "  - xvel_boost_multiplier = 5.0"
 -echo "  - Energy weights UNCHANGED from v3 (Option A)"
-+echo "  - ours_weights: all alpha_c = 0.50"
++echo "  - ours_weights alpha_E_norm = 0.00 (only CDER change vs v3.1 hierarchy)"
  echo "  - Output: $OUT_DIR"
  echo "  - Log:    $LOG_FILE"
  echo ""
@@ -38,7 +38,7 @@
      --total-steps 1500000 \
      --seed 0 \
      --n-steps 1024 \
-@@ -29,7 +38,41 @@
+@@ -29,7 +38,42 @@
      --learning-rate 3e-4 \
      --gamma 0.99 \
      --env-class ours_cder_v31_env:RatCpgEnvEnergySubstep50ShapeV3 \
@@ -56,7 +56,7 @@
 +import json
 +from pathlib import Path
 +cfg = {
-+  'run_name': 'ablation_equal_weights_seed0',
++  'run_name': 'ablation_no_norm_seed0',
 +  'original_launch_script': '$ORIG_SCRIPT',
 +  'env_kwargs_file': '$ENV_KWARGS_FILE',
 +  'env_kwargs': json.load(open('$ENV_KWARGS_FILE')),
@@ -74,6 +74,7 @@
 +    'n_epochs': 10,
 +    'policy': 'MlpPolicy',
 +  },
++  'note': 'CDER alphas passed via ours_weights; flat alpha_* keys in user spec map here.',
 +}
 +Path('$OUT_DIR/effective_config.json').write_text(json.dumps(cfg, indent=2))
 +"

@@ -3,8 +3,8 @@
 Thesis-experiments master measurement campaign.
 
 Two policies are rolled out for 20 deterministic episodes (82 env-steps × 50 substeps = 4100 substeps each):
-  baseline (W2): logs/w2_baseline/seed1/checkpoints/rat_cpg_ppo_route_a_1500000_steps.zip
-  cder   (V3.1): logs/w3_ours_v3.1/seed0/rat_cpg_ppo_route_a.zip
+  baseline: logs/baseline/seed1/checkpoints/rat_cpg_ppo_route_a_1500000_steps.zip
+  ours: logs/ours/seed0/rat_cpg_ppo_route_a.zip
 
 For each policy, per-substep kinematics + per-substep energy decomposition
 (W+, W-, E_damp, E_fric, E_norm, with per-leg attribution) are recorded, then
@@ -34,7 +34,7 @@ for _p in (ROOT, ROOT / "env", ROOT / "experiments", ROOT / "scripts"):
         sys.path.insert(0, _s)
 
 from rat_cpg_env_energy_substep50 import FootPathFixed  # noqa: E402
-from w2_energy_shaped_env import RatCpgEnvEnergySubstep50ShapeV2  # noqa: E402
+from baseline_energy_shaped_env import RatCpgEnvEnergySubstep50ShapeV2  # noqa: E402
 from ours_cder_v31_env import RatCpgEnvEnergySubstep50ShapeV3  # noqa: E402
 
 XML_REL = "../TrotGait/models/dynamic_4l_kp2.xml"
@@ -42,10 +42,10 @@ MODEL_PATH = str((ROOT / XML_REL).resolve())
 OUT_DIR = ROOT / "outputs" / "thesis_experiments"
 OUT_DIR.mkdir(parents=True, exist_ok=True)
 
-CKPT_BASELINE = ROOT / "logs/w2_baseline/seed1/checkpoints/rat_cpg_ppo_route_a_1500000_steps.zip"
-CKPT_CDER = ROOT / "logs/w3_ours_v3.1/seed0/rat_cpg_ppo_route_a.zip"
+CKPT_BASELINE = ROOT / "logs/baseline/seed1/checkpoints/rat_cpg_ppo_route_a_1500000_steps.zip"
+CKPT_CDER = ROOT / "logs/ours/seed0/rat_cpg_ppo_route_a.zip"
 
-TB_LOGDIR_CDER = ROOT / "logs/w3_ours_v3.1/seed0/tb_logs/PPO_1"
+TB_LOGDIR_CDER = ROOT / "logs/ours/seed0/tb_logs/PPO_1"
 
 LEG_NAMES = ["FL", "FR", "RL", "RR"]
 FOOT_BODIES = ["foot_fl", "foot_fr", "foot_rl", "foot_rr"]
@@ -1125,7 +1125,7 @@ def main() -> None:
 
     print("\n=== Rollout: baseline (W2, seed1) ===")
     logs_base = collect_rollout("baseline", ckpt_base)
-    print("\n=== Rollout: CDER (v3.1, seed0) ===")
+    print("\n=== Rollout: ours (, seed0) ===")
     logs_cder = collect_rollout("cder", ckpt_cder)
 
     # Save raw NPZs (compact: per-episode env-step level + small per-substep summaries)
@@ -1229,7 +1229,7 @@ def main() -> None:
         file_tag="baseline", hip_offsets=hip_offsets,
     )
     m4_cder = task_m4_baseline_diag(
-        logs_cder, OUT_DIR, policy_label="CDER (v3.1 seed0)",
+        logs_cder, OUT_DIR, policy_label="ours ( seed0)",
         file_tag="cder", hip_offsets=hip_offsets,
     )
 

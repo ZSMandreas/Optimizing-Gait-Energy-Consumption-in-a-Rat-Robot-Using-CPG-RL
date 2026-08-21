@@ -1,9 +1,9 @@
 # Ablation A — α_E_norm = 0 — training summary (seed 0)
 
-- Log directory: `/home/user/rat_ws/Optimizing-Gait-Energy-Consumption-in-a-Rat-Robot-Using-CPG-RL/rat-robot/v2-HardControl/CPG_RL/logs/w3_ours_v3.1_ablation_no_norm/seed0`
-- Train log: `/home/user/rat_ws/Optimizing-Gait-Energy-Consumption-in-a-Rat-Robot-Using-CPG-RL/rat-robot/v2-HardControl/CPG_RL/logs/w3_ours_v3.1_ablation_no_norm/seed0/train_20260517_010330.log`
-- TensorBoard: `/home/user/rat_ws/Optimizing-Gait-Energy-Consumption-in-a-Rat-Robot-Using-CPG-RL/rat-robot/v2-HardControl/CPG_RL/logs/w3_ours_v3.1_ablation_no_norm/seed0/tb_logs/PPO_1`
-- Checkpoint: `/home/user/rat_ws/Optimizing-Gait-Energy-Consumption-in-a-Rat-Robot-Using-CPG-RL/rat-robot/v2-HardControl/CPG_RL/logs/w3_ours_v3.1_ablation_no_norm/seed0/rat_cpg_ppo_route_a.zip`
+- Log directory: `/home/user/rat_ws/Optimizing-Gait-Energy-Consumption-in-a-Rat-Robot-Using-CPG-RL/rat-robot/v2-HardControl/CPG_RL/logs/ours_ablation_no_norm/seed0`
+- Train log: `/home/user/rat_ws/Optimizing-Gait-Energy-Consumption-in-a-Rat-Robot-Using-CPG-RL/rat-robot/v2-HardControl/CPG_RL/logs/ours_ablation_no_norm/seed0/train_20260517_010330.log`
+- TensorBoard: `/home/user/rat_ws/Optimizing-Gait-Energy-Consumption-in-a-Rat-Robot-Using-CPG-RL/rat-robot/v2-HardControl/CPG_RL/logs/ours_ablation_no_norm/seed0/tb_logs/PPO_1`
+- Checkpoint: `/home/user/rat_ws/Optimizing-Gait-Energy-Consumption-in-a-Rat-Robot-Using-CPG-RL/rat-robot/v2-HardControl/CPG_RL/logs/ours_ablation_no_norm/seed0/rat_cpg_ppo_route_a.zip`
 - Env config: `/home/user/rat_ws/Optimizing-Gait-Energy-Consumption-in-a-Rat-Robot-Using-CPG-RL/rat-robot/v2-HardControl/CPG_RL/configs/ablation_no_norm_env_kwargs.json`
 - M1–M9 eval: `/home/user/rat_ws/Optimizing-Gait-Energy-Consumption-in-a-Rat-Robot-Using-CPG-RL/rat-robot/v2-HardControl/CPG_RL/outputs/thesis_experiments_v3.1_ablation_no_norm/`
 
@@ -81,7 +81,7 @@ Shared with v3.1 seed0: ShapeV3 env, 1.5M steps, 4 parallel envs, PPO defaults (
 | mean b (mm) | 1.76 | 1.02 |
 | ep length | 82.0 | 82 |
 
-Source: `/home/user/rat_ws/Optimizing-Gait-Energy-Consumption-in-a-Rat-Robot-Using-CPG-RL/rat-robot/v2-HardControl/CPG_RL/logs/w3_ours_v3.1_ablation_no_norm/seed0/sanity_check.md`
+Source: `/home/user/rat_ws/Optimizing-Gait-Energy-Consumption-in-a-Rat-Robot-Using-CPG-RL/rat-robot/v2-HardControl/CPG_RL/logs/ours_ablation_no_norm/seed0/sanity_check.md`
 
 ## M1–M9 standard eval (20 ep)
 

@@ -43,17 +43,17 @@ M2_EVAL_JSON: Dict[float, Path] = {
     0.12: MULTI_VCMD / "pilot_v_cmd_0.12/final_eval_ours_1500k.json",
 }
 
-M2_PER_SPEED: Dict[float, Dict[str, Path]] = {
+OURS_PER_SPEED: Dict[float, Dict[str, Path]] = {
     0.06: {
-        "ckpt": CPG_ROOT / "logs/w3_ours_vcmd0.06_thesis_scaled_v2/seed0/rat_cpg_ppo_route_a.zip",
+        "ckpt": CPG_ROOT / "logs/ours_vcmd0.06_thesis_scaled_v2/seed0/rat_cpg_ppo_route_a.zip",
         "env_kwargs": CPG_ROOT / "configs/v31_vcmd0.06_thesis_scaled_v2.json",
     },
     0.09: {
-        "ckpt": CPG_ROOT / "logs/w3_ours_vcmd0.09_thesis_scaled/seed0/rat_cpg_ppo_route_a.zip",
+        "ckpt": CPG_ROOT / "logs/ours_vcmd0.09_thesis_scaled/seed0/rat_cpg_ppo_route_a.zip",
         "env_kwargs": CPG_ROOT / "configs/v31_vcmd0.09_thesis_scaled.json",
     },
     0.12: {
-        "ckpt": CPG_ROOT / "logs/w3_ours_v3.1/seed0/rat_cpg_ppo_route_a.zip",
+        "ckpt": CPG_ROOT / "logs/ours/seed0/rat_cpg_ppo_route_a.zip",
         "env_kwargs": CPG_ROOT / "configs/ours_cder_v31_env_kwargs.json",
     },
 }
@@ -70,7 +70,7 @@ def _load_m2_from_json(v_cmd: float) -> Dict[str, Any]:
     dists = [float(e["distance_m"]) * 1000.0 for e in per_ep]
     return {
         "v_cmd_mps": v_cmd,
-        "model": "M2_ours",
+        "model": "ours",
         "source": str(path.relative_to(CPG_ROOT)),
         "ckpt": data.get("ckpt", ""),
         "n_episodes": int(data.get("n_episodes", len(per_ep))),
@@ -90,7 +90,7 @@ def _load_m2_from_json(v_cmd: float) -> Dict[str, Any]:
 
 def run_m2_envstep(v_cmd: float, n_episodes: int = rss.N_EPISODES) -> Tuple[List[rss.SubstepEpisode], List[rss.EpisodeScalars]]:
     """M2 per-speed ckpt with env-step COT (same pipeline as M3/M4)."""
-    spec = M2_PER_SPEED[v_cmd]
+    spec = OURS_PER_SPEED[v_cmd]
     ckpt = spec["ckpt"]
     env_kwargs = rss.load_env_kwargs(spec["env_kwargs"])
     env = RatCpgEnvEnergySubstep50ShapeV3(**env_kwargs)
@@ -155,11 +155,11 @@ def load_m2_row(v_cmd: float, *, source: str) -> Dict[str, Any]:
         raise ValueError(f"unknown m2 source: {source}")
 
     _, scalars = run_m2_envstep(v_cmd)
-    spec = M2_PER_SPEED[v_cmd]
+    spec = OURS_PER_SPEED[v_cmd]
     tag = f"vcmd{v_cmd:.2f}".replace(".", "")
     env_kw = rss.load_env_kwargs(spec["env_kwargs"])
     summary = rss.build_eval_summary(
-        "M2_ours",
+        "ours",
         str(spec["ckpt"].relative_to(CPG_ROOT)),
         {
             "v_cmd": v_cmd,
@@ -169,16 +169,16 @@ def load_m2_row(v_cmd: float, *, source: str) -> Dict[str, Any]:
         scalars,
         notes=f"Per-speed RL ckpt; unified env-step COT @ v_cmd={v_cmd}",
     )
-    _save_eval_summary(f"m2_ours/{tag}", summary)
+    _save_eval_summary(f"ours/{tag}", summary)
 
     row = _scalars_to_row(
-        v_cmd, "M2_ours", scalars,
+        v_cmd, "ours", scalars,
         target_mm_s=float(summary["fwd_speed_mm_s"]["mean"]),
         source="sim (env-step COT)",
     )
     row["ckpt"] = str(spec["ckpt"].relative_to(CPG_ROOT))
 
-    out = OUT_ROOT / "m2_ours" / f"{tag}_envstep.json"
+    out = OUT_ROOT / "ours" / f"{tag}_envstep.json"
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(json.dumps(row, indent=2), encoding="utf-8")
     return row
@@ -196,7 +196,7 @@ def _load_planner_rows_from_csv(v_cmds: List[float]) -> List[Dict[str, Any]]:
     rows: List[Dict[str, Any]] = []
     with CSV_PATH.open(newline="", encoding="utf-8") as f:
         for r in csv.DictReader(f):
-            if r["model"] == "M2_ours":
+            if r["model"] == "ours":
                 continue
             if float(r["v_cmd_mps"]) not in v_cmds:
                 continue
@@ -333,16 +333,16 @@ def run_one_speed(
             fre, calib_log["m3_sweep"] = _calibrate_m3(target_mm_s, n_sweep)
         elif fre is None:
             fre = rss.M3_FRE
-        _, sc3 = rss.run_m3_planner(fre=fre)
+        _, sc3 = rss.run_baseline(fre=fre)
         m3_row = _scalars_to_row(
-            v_cmd, "M3_planner", sc3,
+            v_cmd, "baseline", sc3,
             target_mm_s=target_mm_s, m3_fre=fre,
         )
         m3_row["source"] = "sim (env-step COT)"
         _save_eval_summary(
-            f"m3_planner/{tag}",
+            f"baseline/{tag}",
             rss.build_eval_summary(
-                "M3_planner",
+                "baseline",
                 str(rss.SCRIPT_M3.relative_to(CPG_ROOT.parent)),
                 {"v_cmd": v_cmd, "fre": fre, "speed_matched": True, "target_mm_s": target_mm_s},
                 sc3,
@@ -356,16 +356,16 @@ def run_one_speed(
             f_hz, calib_log["m4_sweep"] = _calibrate_m4(target_mm_s, n_sweep)
         elif f_hz is None:
             f_hz = rss.F_M4
-        _, sc4 = rss.run_m4_planner_simplified(f_planner=f_hz)
+        _, sc4 = rss.run_baseline_simplified(f_planner=f_hz)
         m4_row = _scalars_to_row(
-            v_cmd, "M4_planner_simplified", sc4,
+            v_cmd, "baseline_simplified", sc4,
             target_mm_s=target_mm_s, m4_f=f_hz,
         )
         m4_row["source"] = "sim (env-step COT)"
         _save_eval_summary(
-            f"m4_planner_simplified/{tag}",
+            f"baseline_simplified/{tag}",
             rss.build_eval_summary(
-                "M4_planner_simplified",
+                "baseline_simplified",
                 str(rss.SCRIPT_M4.relative_to(CPG_ROOT)),
                 {"v_cmd": v_cmd, "f": f_hz, "a": rss.A_M4, "b": rss.B_M4,
                  "speed_matched": True, "target_mm_s": target_mm_s},
@@ -375,7 +375,7 @@ def run_one_speed(
         )
 
     if m2_source == "pilot" and "m2" in models and m2_row.get("source", "").endswith(".json"):
-        m2_out = OUT_ROOT / "m2_ours" / f"{tag}_from_pilot.json"
+        m2_out = OUT_ROOT / "ours" / f"{tag}_from_pilot.json"
         m2_out.parent.mkdir(parents=True, exist_ok=True)
         m2_out.write_text(json.dumps(m2_row, indent=2), encoding="utf-8")
 
@@ -421,11 +421,11 @@ def _write_readme(all_rows: List[Dict[str, Any]], *, m2_source: str) -> None:
     ]
     for r in all_rows:
         cal = ""
-        if r["model"] == "M3_planner" and r.get("m3_fre"):
+        if r["model"] == "baseline" and r.get("m3_fre"):
             cal = f"fre={float(r['m3_fre']):.2f} Hz"
-        elif r["model"] == "M4_planner_simplified" and r.get("m4_f_hz"):
+        elif r["model"] == "baseline_simplified" and r.get("m4_f_hz"):
             cal = f"f={float(r['m4_f_hz']):.2f} Hz"
-        elif r["model"] == "M2_ours":
+        elif r["model"] == "ours":
             cal = "per-speed RL ckpt"
         lines.append(
             f"| {float(r['v_cmd_mps']):.2f} | {r['model']} | "
@@ -479,7 +479,7 @@ def main() -> None:
 
     if args.refresh_m2_only:
         all_rows.extend(planner_rows)
-        _model_order = {"M2_ours": 0, "M3_planner": 1, "M4_planner_simplified": 2}
+        _model_order = {"ours": 0, "baseline": 1, "baseline_simplified": 2}
         all_rows.sort(
             key=lambda r: (float(r["v_cmd_mps"]), _model_order.get(r["model"], 9))
         )

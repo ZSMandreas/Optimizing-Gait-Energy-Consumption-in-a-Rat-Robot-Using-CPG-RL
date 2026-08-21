@@ -5,11 +5,11 @@ from typing import Dict
 
 import numpy as np
 
-from w2_energy_shaped_env import RatCpgEnvEnergySubstep50ShapeV2
+from baseline_energy_shaped_env import RatCpgEnvEnergySubstep50ShapeV2
 
 
 class RatCpgEnvEnergySubstep50ShapeV3(RatCpgEnvEnergySubstep50ShapeV2):
-    """W3 Ours v3.1: replace W2 energy term and optionally boost xvel penalty."""
+    """Ours v3.1: replace baseline energy term and optionally boost xvel penalty."""
 
     DEFAULT_WEIGHTS = {
         "alpha_W_pos": 0.30,
